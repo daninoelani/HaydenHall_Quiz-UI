@@ -1,19 +1,20 @@
 import React, { Component } from 'react';
 import { apiurl } from './config'
+// import { Link } from 'react-router-dom'
 
 class NewUser extends Component {
     state = {
-        _id: "",
         name: "",
-        score:[]
+        score: []
     }
     handleChange = (event) => {
         this.setState({ [event.target.name]: event.target.value })
         }
 
-    handleSubmit = (event) => {
+    handleSubmit = async (event) => {
         event.preventDefault()
         this.newUserInput()
+        await this.props.history.push('./Questions')
     }
     
     newUserInput = async () => {
@@ -22,9 +23,9 @@ class NewUser extends Component {
           body: JSON.stringify(this.state)
         })
           .catch(err => console.log(err))
-          console.log(this.state.name)
-          this.setState({name:""})
       };
+
+      
     render(){
         return (
             <form onSubmit={this.handleSubmit}>

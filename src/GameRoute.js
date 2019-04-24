@@ -6,11 +6,6 @@ import Questions from './Questions'
 
 
 class GameRoute extends Component {
-  state= {
-    _id: '',
-    name: '',
-    score: '',    
-  }
   
 // a function lives her that passed to new user as props and sets game route state
   render() {
@@ -22,7 +17,7 @@ class GameRoute extends Component {
           <ul className='Nav'>
             <li><NavLink exact to ="/">Home</NavLink></li>
             <li><NavLink to ="/NewUser">New User</NavLink></li>
-            <li><NavLink to ="/Questions">Questions</NavLink></li>
+            {/* <li><NavLink to ="/Questions">Questions</NavLink></li> */}
           </ul>
           <Switch>
             <Route exact path="/" component={Home}/>

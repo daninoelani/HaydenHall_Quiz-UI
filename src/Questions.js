@@ -1,21 +1,24 @@
 import React, { Component } from 'react';
 import { apiurl } from './config'
+import DisplayQuestions from './DisplayQuestions'
 
-// I want to be able to grab a question and only display one at a time and then display
-// the next question when I click a button and then never repeat a question. Once the
-// max questions have been reached, in this case 5, then display a victory screen, where
-// there will be an update button that will add up all the questions numbers and then 
-// to the user a highscore
+// There should be a question component that takes in a single question object from the database and the question component will parse out whatever you want to display.
+// for each question you have a questions component This file is the parent to the single questions component
+// just some minor refactoring is going to happen. Look at the individual pokemon presenter to get an idea.
 
 class Questions extends Component {
     state= {
         score: [0],
-        title: "",
+        title: [],
         answers:[]
     }
-    add1 = () => {
-        this.state.score.push(1)
-        console.log(this.state.score)
+
+    add1 = (event) => {
+        if (event.target.value === "1"){
+            this.state.score.push(1)
+        }   else {
+            this.state.score.push(0)
+        }
     };
 
     reduce1 = ()=> {
@@ -23,28 +26,23 @@ class Questions extends Component {
         const output = this.state.score.reduce(total)
         this.setState({score: [output]})
     };
+    
+    // handleSubmit = async (event) => {
+    //     event.preventDefault()
+    //     await fetch(`${apiurl}/user/${this.props.name}`, {
+    //         method : "PUT",
+    //         body: JSON.stringify(this.state)
+    //     }).then(console.log("updated"))
+    //     .catch(err => console.log(err))
+    //     // .then(button.style.display = "none") Heres an idea to get all the buttons to disappear when clicked! Style doesnt work, button needs to be defined.
+    // }
 
-    add0 = () => {
-        this.state.score.push(0)
-        console.log(this.state.score)
-    };
-
-    //Code above is the first attempt to add to keep track of score
-    handleSubmit = async (event) => {
-        event.preventDefault()
-        await fetch(`${apiurl}/user/${this.props.name}`, {
-            method : "PUT",
-            body: JSON.stringify(this.state)
-        }).then(console.log("updated"))
-        .catch(err => console.log(err))
-        // .then(button.style.display = "none") Heres an idea to get all the buttons to disappear when clicked! Style doesnt work, button needs to be defined.
-    }
-
-    getQuestions = async () => {
-        await fetch(`${apiurl}/questions`)
+    getQuestions = () => {
+        fetch(`${apiurl}/questions`)
         .then(response => response.json())
-        .then(data => data.map(element => (console.log(element))))
-        .then(components => this.setState({ title : components } ))
+        .then(data => data.map(element => this.setState({ title : element.Title, answers: element.Answers})))
+        .then(()=> console.log(" State", this.state))
+        // .then(components => this.setState({ title : components } ))
         .catch(err =>console.log(err))
     }
 
@@ -53,18 +51,26 @@ class Questions extends Component {
     }
 
     render(){
-        // const answers =[this.state.answers]
-        // const found = answers.find(function(element) {return element = 0});
-        return(
+        // const answerOptions = this.state.answers.map(
+        //     answer => <button key={Object.keys(answer)} 
+        //     value={Object.values(answer)} onClick={this.add1}>
+        //     {Object.keys(answer)}</button>)
+        
+        // const questionsOptions = this.state.title.map(
+        //     question => <h3 key={Object.keys(question)} 
+        //     value={Object.values(question)}>{Object.keys(question)}</h3>)
+            
+        // console.log("questionOptions", Object.values(questionsOptions))
+        // console.log("state",this.state)
+         return(
             <div>
-                <h3>{this.state.title}</h3>
-                <button onClick={this.add1}>Add one into an array</button>
-                <button onClick={this.add0}>Add nothing into an array</button>
-                <button onClick={this.add0}>Add nothing into an array</button>
-                <button onClick={this.add0}>Add nothing into an array</button>
+                {/* {questionsOptions}
+                {answerOptions}
                 <h2>{this.state.score}</h2>
                 <button onClick={this.reduce1}>Reduce this</button>
-                <button onClick={this.handleSubmit}>Update Score</button>
+                <button onClick={this.handleSubmit}>Update Score</button> */}
+                <DisplayQuestions/>
+              
             </div>
         )
     }

@@ -15,6 +15,9 @@ class Home extends Component {
         .catch(err =>console.log(err))
     }
 
+    // showUsers = () => {
+    //     <li>{this.state.name}</li>
+    // }
     componentDidMount(){
         this.getUsers()
     }
@@ -28,6 +31,7 @@ class Home extends Component {
                 <ul>
                     <li>{this.state.name}</li>
                 </ul>
+                
 
 
             </div>

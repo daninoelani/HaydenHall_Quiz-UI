@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 
 class DisplayQuestions extends Component {
-    constructor(props){
-        super(props)
-    }
-    questionOptionsFuncVers = async (props) => {
-        await this.props.map(question => <h3 key={Object.keys(question)} 
-        value={Object.values(question)}>{Object.keys(question)}</h3>)
-        console.log(props)
-    }
+    // constructor(props){
+    //     super(props)
+    // }
+    // questionOptionsFuncVers = async (props) => {
+    //     await this.props.map(question => <h3 key={Object.keys(question)} 
+    //     value={Object.values(question)}>{Object.keys(question)}</h3>)
+    //     console.log(props)
+    // }
     render(){
         // const test = Questions.getQuestions.find( test => {
         //     return test.id === parseInt(this.props)
@@ -29,15 +29,16 @@ class DisplayQuestions extends Component {
         //     question => <h3 key={Object.keys(question)} 
         //     value={Object.values(question)}>{Object.keys(question)}</h3>)
             
-        // console.log("props", this.props.title)
+        console.log("props", this.props)
         return(
             <div>
                 {/* {QO} Throwing an error*/} 
                 {/* {answerOptions} */}
-                <h2>{this.props.score}</h2>
-                <button onClick={this.props.reduce1}>Reduce this</button>
+                <h4>ID:{this.props.question._id}</h4>
+                <h4>Score: {this.props.score}</h4>
+                {/* <button onClick={this.props.reduce1}>Reduce this</button>
                 <button onClick={this.props.add1}>add 1</button>
-                <button onClick={this.handleSubmit}>Update Score</button>
+                <button onClick={this.handleSubmit}>Update Score</button> */}
                 
             </div>
         )

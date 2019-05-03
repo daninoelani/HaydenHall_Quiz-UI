@@ -9,7 +9,7 @@ class GameRoute extends Component {
   
 // a function lives her that passed to new user as props and sets game route state
   render() {
-    console.log('hello')
+    // console.log('hello')
     return (
       <Router>
         <div>

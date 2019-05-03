@@ -5,7 +5,6 @@ import { apiurl } from './config'
 class NewUser extends Component {
     state = {
         name: "",
-        score: []
     }
     handleChange = (event) => {
         this.setState({ [event.target.name]: event.target.value })
@@ -13,16 +12,23 @@ class NewUser extends Component {
 
     handleSubmit = async (event) => {
         event.preventDefault()
-        this.newUserInput()
+        await this.newUserInput()
         await this.props.history.push('./Questions')
     }
     
-    newUserInput = async () => {
+    newUserInput = async (results) => {
         await fetch(`${apiurl}/user`, {
           method: 'POST',
           body: JSON.stringify(this.state)
         })
+        //added some code below
+        .then(response => { return response.json()})
+        // .then(response => console.log('newUserInput res', response.json()))
+        .then(results =>  {console.log('1newUserInput', results)
+        return results} )
+        .then(results =>  console.log('2newUserInput', results))
           .catch(err => console.log(err))
+        //   console.log('res', results) 
       };
 
       

@@ -7,103 +7,80 @@ import DisplayQuestions from './DisplayQuestions'
 // there will be an update button that will add up all the questions numbers and then 
 // to the user a highscore
 
+// let answerVal = 0
+// console.log("answerVal", answerVal)
+
 class Questions extends Component {
-    state= {
+    state = {
+        id: '',
         questions: [],
-        score: 0,
+        answers: [],
         title: "",
-        answers:[],
-        
-    }
-    add1 = () => {
-        this.state.score.push(1)
-        console.log(this.state.score)
-    };
-
-    reduce1 = ()=> {
-        const total = (accumulator, currentValue) => accumulator + currentValue;
-        const output = this.state.score.reduce(total)
-        this.setState({score: [output]})
-    };
-
-    add0 = () => {
-        this.state.score.push(0)
-        console.log(this.state.score)
-    };
-
-    handleScore = (event) => {
-        console.log("event.target.value", parseInt(event.target.value))
-        let newScore = this.state.score + parseInt(event.target.value)
-        return this.setState({score: newScore})
+        score: 0,
     }
 
-    //Code above is the first attempt to add to keep track of score
-    handleSubmit = async (event) => {
-        event.preventDefault()
-        await fetch(`${apiurl}/user/${this.props.name}`, {
-            method : "PUT",
-            body: JSON.stringify(this.state)
-        }).then(console.log("updated"))
-        .catch(err => console.log(err))
-        // .then(button.style.display = "none") Heres an idea to get all the buttons to disappear when clicked! Style doesnt work, button needs to be defined.
+    handleScore = (someVal) => {
+        console.log('handleScore', someVal, 'id', this.state.id) // id undefined here
+        let newScore = this.state.score + parseInt(someVal)
+        return this.setState({ score: newScore })
     }
 
-    
+    QuestionsAnswerClick = (answerVal) => {
+        console.log("Q answerClick", answerVal)
+        this.handleScore(answerVal)
+    }
+
     getQuestions = async () => {
+        console.log('id', this.props.id)  // id undefined here
         await fetch(`${apiurl}/questions`)
-        .then(response => response.json())
-        // .then(response => console.log("response", response))
-        .then(response => this.setState({questions: [...response]}))
-        .then(this.mapQuestions)
-        // .then(this.state.questions.map(element => this.setState({ answers: element.Answers})))
-        // .then(data => data.map(element => this.setState({ title : element.Title, answers: element.Answers})))
-        // .then(this.state.answers.map(answer => <button>{Object.keys(answer)}</button>))
-        // .then(components => this.setState({ title : components } ))
-        .catch(err =>console.log(err))
+            .then(response => response.json())
+            .then(response => this.setState({ questions: [...response] }))
+            .catch(err => console.log(err))
     }
 
-    mapQuestions = () => {
-        console.log('mapQuestions this.state', this.state)
-        // this.state.questions.map(element => this.setState({ answers: element.Answers}))
-    }
-
-    componentDidMount(){
+    componentDidMount() {
         this.getQuestions()
     }
 
-    render(){
+    render() {
 
         console.log(this.state.score)
 
-        // const answerOption = this.state.answers.map(
-        //     answer => <button key= {Object.keys(answer)} value={Object.values(answer)} onClick= {this.handleScore} >{Object.keys(answer)}</button>)
-    
+        var styleNew = [
+            {background: 'grey'},
+            {background: 'blue'},
+            {background: 'green'},
+            {background: 'orange'},
+            {background: 'red'},
+            {color: 'green'},
+        ];
+
         const mapQuestionsToComponent = this.state.questions.map(
-            question => <div key={question._id}>
+            (question, index) => <div style={styleNew[index]} key={question._id}>
                 <h4>Question id:  {question._id}</h4>
-                {question.Title.map(title => <p key={Object.keys(title)}>{Object.keys(title)}</p>)}
-                {question.Answers.map(answer => <button key= {Object.keys(answer)} value={Object.values(answer)} onClick= {this.handleScore} >{Object.keys(answer)}</button>)}
+                <h3>{question.Title}</h3>
+                {question.Answers.map(answer => <button key={Object.keys(answer)} value={Object.values(answer)}
+                    onClick={
+                        (event) => {
+                            this.QuestionsAnswerClick(event.target.value)
+                        }
+                    }
+                >
+                    {Object.keys(answer)}
+                </button>)}
             </div>)
 
+       
         const mapQ2 = this.state.questions.map(
-            question => <DisplayQuestions key={question._id} question={question}/>
+            (question, index) => <DisplayQuestions key={question._id} id={question._id} question={question} index={index} handleScore={(someValue) => {/*alert(someValue);*/this.handleScore(someValue) }} />
         )
 
-        // const answers =[this.state.answers]
-        // const found = answers.find(function(element) {return element = 0});
-        return(
+        
+        return (
             <div>
-                <h3>{this.state.title}</h3>
-                {/* <button onClick={this.add1}>Add one into an array</button>
-                <button onClick={this.add0}>Add nothing into an array</button>
-                <button onClick={this.add0}>Add nothing into an array</button>
-                <button onClick={this.add0}>Add nothing into an array</button>
-                <button onClick={this.reduce1}>Reduce this</button>
-                <button onClick={this.handleSubmit}>Update Score</button> */}
-                <h2>Your Score: {this.state.score}</h2>
+                <h2 style={styleNew[this.state.score]}>Your Score: {this.state.score}</h2>
 
-                {/* {answerOption} */}
-                {mapQuestionsToComponent} 
+                {/* {mapQuestionsToComponent} */}
 
                 <h1>New! mapQ2</h1>
                 {mapQ2}

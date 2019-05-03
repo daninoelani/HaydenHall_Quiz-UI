@@ -2,36 +2,63 @@ import React, { Component } from 'react';
 import { apiurl } from './config'
 import "../src/I_styling/Home.css"
 
+// import Questions from './Questions'
+
+
 class Home extends Component {
     state = {
-        name: '',
-        score: []
+        users: []
     }
     getUsers = async () => {
         await fetch(`${apiurl}/user`)
-        .then(response => response.json())
-        .then(data => data.map(element => <h3 key={element._id}>{element.name}</h3>))
-        .then(components => this.setState({ name : components}))
-        .catch(err =>console.log(err))
+            .then(response => response.json())
+            .then(users => this.setState({ users: users }))
+            .catch(err => console.log(err))
     }
 
-    // showUsers = () => {
-    //     <li>{this.state.name}</li>
+    deleteUser = async (id) => {
+        console.log('deleteUser:', id)
+        await fetch(`${apiurl}/user/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(() => {
+                this.getUsers()
+            })
+            .catch(err =>
+                console.log(err))
+    }
+
+    // takeQuiz = async (id) => {
+    //     console.log('history', id) // id is correct here
+    //     // redirect to questions and pass in the id
+    //     // should be able to apply to new user
+    //     await 
+    //     await this.props.history.push('./Questions', id)
     // }
-    componentDidMount(){
+
+
+
+    componentDidMount() {
         this.getUsers()
     }
+    render() {
+        const userView = this.state.users.map(user =>
+            <div key={user._id}>
+                <h3>Name: {user.name} Score: {user.score}</h3>
+                <button onClick={event => {this.takeQuiz(user._id)}}>Retake Quiz</button>
+                <button onClick={event => {this.deleteUser(user._id)}}>Delete</button>
+            </div>
+        )
 
-    render(){
+
         return (
             <div>
-                <h2>
-                    People who have taken this Quiz!
-                </h2>
-                <ul>
-                    <li>{this.state.name}</li>
-                </ul>
-                
+                <h2>People who have taken this Quiz!</h2>
+
+                {userView}
 
 
             </div>

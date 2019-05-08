@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { apiurl } from './config'
 // import { Link } from 'react-router-dom'
 
+let id = ''
+
 class NewUser extends Component {
     state = {
         name: "",
@@ -13,7 +15,7 @@ class NewUser extends Component {
     handleSubmit = async (event) => {
         event.preventDefault()
         await this.newUserInput()
-        await this.props.history.push('./Questions')
+        await this.props.history.push('./Questions', id)
     }
     
     newUserInput = async (results) => {
@@ -21,14 +23,12 @@ class NewUser extends Component {
           method: 'POST',
           body: JSON.stringify(this.state)
         })
-        //added some code below
         .then(response => { return response.json()})
-        // .then(response => console.log('newUserInput res', response.json()))
-        .then(results =>  {console.log('1newUserInput', results)
-        return results} )
-        .then(results =>  console.log('2newUserInput', results))
+        // .then(results =>  {console.log('1newUserInput', results)
+        // return results} )
+        .then(results => {return id = results._id})
+        // .then(id => {console.log('newId', id)})
           .catch(err => console.log(err))
-        //   console.log('res', results) 
       };
 
       

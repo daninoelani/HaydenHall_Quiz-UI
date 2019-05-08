@@ -12,7 +12,6 @@ import DisplayQuestions from './DisplayQuestions'
 
 class Questions extends Component {
     state = {
-        id: '',
         questions: [],
         answers: [],
         title: "",
@@ -20,39 +19,57 @@ class Questions extends Component {
     }
 
     handleScore = (someVal) => {
-        console.log('handleScore', someVal, 'id', this.state.id) // id undefined here
+        // console.log('Questions handleScore', someVal, 'id', this.props.location.state) // id undefined here
         let newScore = this.state.score + parseInt(someVal)
         return this.setState({ score: newScore })
     }
 
     QuestionsAnswerClick = (answerVal) => {
-        console.log("Q answerClick", answerVal)
+        // console.log("Questions answerClick", answerVal)
         this.handleScore(answerVal)
     }
 
     getQuestions = async () => {
-        console.log('id', this.props.id)  // id undefined here
+        // console.log('Questions getQuestions id', this.props.location.state)  // id undefined here
         await fetch(`${apiurl}/questions`)
             .then(response => response.json())
             .then(response => this.setState({ questions: [...response] }))
             .catch(err => console.log(err))
     }
 
+    // working on update for user score results
+    userScoreResults = async () => {
+        console.log('Questions this.state.score', this.state.score)
+        let id = this.props.location.state._id
+        let body = {
+            "name": this.props.location.state.name,
+            "score": this.state.score
+        }
+        console.log("body", body)
+        await fetch(`${apiurl}/user/${id}`, {
+            method: 'PUT',
+            body: JSON.stringify(body)
+        })
+    }
+
+
     componentDidMount() {
         this.getQuestions()
+        this.setState({ id: this.props.location.state })
+
     }
 
     render() {
-
-        console.log(this.state.score)
+        console.log('this.props.history', this.props.history)
+        console.log("Questions this.props.location.state", this.props.location.state.name)
 
         var styleNew = [
-            {background: 'grey'},
-            {background: 'blue'},
-            {background: 'green'},
-            {background: 'orange'},
-            {background: 'red'},
-            {color: 'green'},
+            { background: 'grey' },
+            { background: 'blue' },
+            { background: 'green' },
+            { background: 'orange' },
+            { background: 'red' },
+            { color: 'green' },
         ];
 
         const mapQuestionsToComponent = this.state.questions.map(
@@ -70,12 +87,20 @@ class Questions extends Component {
                 </button>)}
             </div>)
 
-       
+
         const mapQ2 = this.state.questions.map(
-            (question, index) => <DisplayQuestions key={question._id} id={question._id} question={question} index={index} handleScore={(someValue) => {/*alert(someValue);*/this.handleScore(someValue) }} />
+            (question, index) => <DisplayQuestions 
+            key={question._id} 
+            id={question._id} 
+            question={question} 
+            index={index} 
+            count={this.state.questions.length} 
+            handleScore={(someValue) => {/*alert(someValue);*/this.handleScore(someValue) }} 
+            userScoreResults={(userScore)=> {this.userScoreResults(userScore)}}
+            />
         )
 
-        
+
         return (
             <div>
                 <h2 style={styleNew[this.state.score]}>Your Score: {this.state.score}</h2>

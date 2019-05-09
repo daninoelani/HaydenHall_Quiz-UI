@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { apiurl } from './config'
 // import { Link } from 'react-router-dom'
 
-let id = ''
 
 class NewUser extends Component {
     state = {
@@ -15,9 +14,14 @@ class NewUser extends Component {
     handleSubmit = async (event) => {
         event.preventDefault()
         await this.newUserInput()
-        await this.props.history.push('./Questions', id)
+        // await this.props.history.push('./Questions', id)
     }
     
+    // toQuestions = (id) => {
+    //     console.log('newUser this.state.id', this.state.id)
+    //     this.props.history.push('./Questions', this.state.id)
+    // }
+
     newUserInput = async (results) => {
         await fetch(`${apiurl}/user`, {
           method: 'POST',
@@ -26,10 +30,14 @@ class NewUser extends Component {
         .then(response => { return response.json()})
         // .then(results =>  {console.log('1newUserInput', results)
         // return results} )
-        .then(results => {return id = results._id})
-        // .then(id => {console.log('newId', id)})
+        // .then(results => {return id = results._id})
+        // .then(id => {this.setState({id:id}); return id})
+        // .then(id => {console.log('newId', id); this.toQuestions()})
+        .then(results => {console.log('results', results); this.props.history.push('./Questions', results)})
           .catch(err => console.log(err))
       };
+
+
 
       
     render(){

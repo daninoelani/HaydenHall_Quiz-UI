@@ -48,8 +48,10 @@ class Home extends Component {
 
 
     componentDidMount() {
+        // console.log('Home componentDidMount')
         this.getUsers()
     }
+
     render() {
         // console.log('this.props.history', this.props.history)
         const userView = this.state.users.map(user =>

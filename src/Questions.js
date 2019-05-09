@@ -39,29 +39,28 @@ class Questions extends Component {
 
     // working on update for user score results
     userScoreResults = async () => {
-        console.log('Questions this.state.score', this.state.score)
+        // console.log('Questions this.state.score', this.state.score)
         let id = this.props.location.state._id
         let body = {
             "name": this.props.location.state.name,
             "score": this.state.score
         }
-        console.log("body", body)
+        // console.log("body", body)
         await fetch(`${apiurl}/user/${id}`, {
             method: 'PUT',
             body: JSON.stringify(body)
         })
+        .then(setTimeout(() => { this.props.history.replace('./') }, 1000))
     }
 
 
     componentDidMount() {
         this.getQuestions()
-        this.setState({ id: this.props.location.state })
-
     }
 
     render() {
-        console.log('this.props.history', this.props.history)
-        console.log("Questions this.props.location.state", this.props.location.state.name)
+        console.log('Questions this.props.history', this.props.history)
+        console.log("Questions this.props.location.state", this.props.location.state)
 
         var styleNew = [
             { background: 'grey' },
@@ -72,20 +71,20 @@ class Questions extends Component {
             { color: 'green' },
         ];
 
-        const mapQuestionsToComponent = this.state.questions.map(
-            (question, index) => <div style={styleNew[index]} key={question._id}>
-                <h4>Question id:  {question._id}</h4>
-                <h3>{question.Title}</h3>
-                {question.Answers.map(answer => <button key={Object.keys(answer)} value={Object.values(answer)}
-                    onClick={
-                        (event) => {
-                            this.QuestionsAnswerClick(event.target.value)
-                        }
-                    }
-                >
-                    {Object.keys(answer)}
-                </button>)}
-            </div>)
+        // const mapQuestionsToComponent = this.state.questions.map(
+        //     (question, index) => <div style={styleNew[index]} key={question._id}>
+        //         <h4>Question id:  {question._id}</h4>
+        //         <h3>{question.Title}</h3>
+        //         {question.Answers.map(answer => <button key={Object.keys(answer)} value={Object.values(answer)}
+        //             onClick={
+        //                 (event) => {
+        //                     this.QuestionsAnswerClick(event.target.value)
+        //                 }
+        //             }
+        //         >
+        //             {Object.keys(answer)}
+        //         </button>)}
+        //     </div>)
 
 
         const mapQ2 = this.state.questions.map(

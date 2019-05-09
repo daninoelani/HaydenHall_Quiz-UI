@@ -50,14 +50,14 @@ class DisplayQuestions extends Component {
 
         const answerClick = (answerVal) => {
             // console.log("DisplayQuestions answerClick", answerVal)
-            if(index != this.props.count-1)
+            if(index !== this.props.count-1)
             {
             this.props.handleScore(answerVal)
             index++
         }
-        else if (index == this.props.count-1){ 
+        else if (index === this.props.count-1){ 
             this.props.handleScore(answerVal)
-            console.log('update score')
+            // console.log('update score')
             index++
 
             // return this.props.userScoreResults() 
@@ -71,7 +71,7 @@ class DisplayQuestions extends Component {
         const OneAtATime = () => {
             
             if (this.props.index === index ) {
-                console.log("count", this.props.count, "index", index)
+                // console.log("count", this.props.count, "index", index)
                 let styleCount = styleNew[index]
                 // console.log("DisplayQuestions index", this.props.index)
                 return <div style={styleCount}>
@@ -96,7 +96,7 @@ class DisplayQuestions extends Component {
                 )}
                 </div>
             }else if (index === this.props.count) {
-                console.log("done 1")
+                // console.log("done 1")
                 this.props.userScoreResults() 
                 index = 0
                 return null
